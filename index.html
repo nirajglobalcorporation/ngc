@@ -43,8 +43,10 @@ header{ background:rgba(255,255,255,0.9); padding:18px; text-align:center; font-
 
 .product-info{padding:20px; flex-grow: 1; display: flex; flex-direction: column;}
 .price{color:var(--accent); font-weight:600; margin:10px 0; font-size:18px;}
+.features{font-size:13px; margin-bottom:12px; list-style:none; flex-grow:1;}
+.features li::before {content: "• "; color: var(--accent);}
 
-.size-selector button{ padding:6px 12px; margin:5px 6px 5px 0; border-radius:20px; border:1px solid var(--primary); background:white; cursor:pointer; transition:0.3s;}
+.size-selector button{ padding:6px 12px; margin:5px 6px 5px 0; border-radius:20px; border:1px solid var(--primary); background:white; cursor:pointer; }
 .size-selector button.selected{background:var(--primary); color:white;}
 
 .btn-group {display: flex; gap: 10px; margin-top: 15px;}
@@ -59,7 +61,7 @@ header{ background:rgba(255,255,255,0.9); padding:18px; text-align:center; font-
 .cart-sidebar.active{right:0;}
 
 .cart-item{border-bottom:1px solid #eee; margin-bottom:12px; padding-bottom:12px;}
-.remove-btn{background:red; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer; margin-top:5px;}
+.remove-btn{background:red; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer;}
 
 #payment-box { text-align: center; background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--accent); }
 .qr-display { width: 180px; height: 180px; margin: 10px auto; display: block; border: 2px solid #eee; border-radius: 8px; }
@@ -139,26 +141,48 @@ footer{margin-top:40px; padding:40px 20px; text-align:center; background:#fff; b
 const products = [
 {
     title: "Lakhadti Men’s Handmade Leather Jutti",
-    variant: "Men's Premium Brown",
+    variant: "Brown Variant Men's",
     price: 1499,
     rzp: "https://rzp.io/rzp/soDdTOiB",
     qr: "https://i.ibb.co/m5pK0z0B/Fix-1499.jpg",
     sizes: [6, 7, 8, 9, 10],
-    images: ["https://i.ibb.co/N1kG9xT/1.jpg","https://i.ibb.co/1fW5g0t/2.jpg"]
+    features: ["Premium Synthetic Leather Upper","Traditional Handmade Design","Soft Cushioned Insole"],
+    images: ["https://i.ibb.co/N1kG9xT/1.jpg","https://i.ibb.co/1fW5g0t/2.jpg","https://i.ibb.co/pLgLd4Z/3.jpg"]
 },
 {
-    title: "Handcrafted Brown Punjabi Jutti for Women",
-    variant: "Women's Royal Cutwork",
+    title: "Lakhadti Men’s Handmade Leather Jutti",
+    variant: "Black Variant Men's",
+    price: 1499,
+    rzp: "https://rzp.io/rzp/soDdTOiB",
+    qr: "https://i.ibb.co/m5pK0z0B/Fix-1499.jpg",
+    sizes: [6, 7, 8, 9, 10],
+    features: ["Premium Synthetic Leather Upper","Traditional Handmade Design","Soft Cushioned Insole"],
+    images: ["https://i.ibb.co/v6n9dKj/1.jpg","https://i.ibb.co/g4bK7X6/2.jpg","https://i.ibb.co/Hq2W9z9/3.jpg"]
+},
+{
+    title: "Lakhadti Men’s Handmade Leather Jutti",
+    variant: "Maroon Variant Men's",
+    price: 1499,
+    rzp: "https://rzp.io/rzp/soDdTOiB",
+    qr: "https://i.ibb.co/m5pK0z0B/Fix-1499.jpg",
+    sizes: [6, 7, 8, 9, 10],
+    features: ["Premium Synthetic Leather Upper","Traditional Handmade Design","Soft Cushioned Insole"],
+    images: ["https://i.ibb.co/QfY9pPq/1.jpg","https://i.ibb.co/r7C8h0x/2.jpg","https://i.ibb.co/4K3589B/3.jpg"]
+},
+{
+    title: "Handcrafted Pure Leather Brown Punjabi Jutti for Women",
+    variant: "Brown Variant Women's",
     price: 999,
     rzp: "https://rzp.io/rzp/07euhe7",
     qr: "https://i.ibb.co/wh1YbB58/Fix-999.jpg",
     sizes: [4, 5, 6, 7],
-    images: ["https://i.ibb.co/KcqCLp29/1772102158894.png","https://i.ibb.co/FLWcSjvv/1772102158882.png"]
+    features: ["Authentic Punjabi Style","Premium leather Material","Intricate Cutwork Design"],
+    images: ["https://i.ibb.co/KcqCLp29/1772102158894.png","https://i.ibb.co/FLWcSjvv/1772102158882.png","https://i.ibb.co/yFxVTS20/1772102158865.png"]
 }
 ];
 
 const OPEN_RZP = "https://razorpay.me/@nirajglobalcorporation";
-const OPEN_QR = "https://i.ibb.co/1GCqsHYW/1772636203741.jpg"; // Aapka open scanner link
+const OPEN_QR = "https://i.ibb.co/1GCqsHYW/1772636203741.jpg";
 
 let cart=[];
 
@@ -171,7 +195,9 @@ ${p.images.map((img,idx)=>`<img src="${img}" class="${idx===0?'active':''}">`).j
 </div>
 <div class="product-info">
 <h3>${p.title}</h3>
+<div style="font-size:14px; color:#666;">${p.variant}</div>
 <div class="price">₹${p.price}</div>
+<ul class="features">${p.features.map(f => `<li>${f}</li>`).join("")}</ul>
 <div class="size-selector" id="size${i}">${p.sizes.map(s=>`<button onclick="selectSize(${i},this)">${s}</button>`).join("")}</div>
 <div class="btn-group">
     <button class="add-cart" onclick="addToCart(${i})">Add to Cart</button>
@@ -207,7 +233,6 @@ document.getElementById("cartItems").innerHTML = html;
 document.getElementById("finalTotal").innerText = total;
 document.getElementById("cartCount").innerText = cart.length;
 
-// Smart Payment Logic
 let rzpBtn = document.getElementById("mainRzpLink");
 let qrImg = document.getElementById("mainQrImg");
 
