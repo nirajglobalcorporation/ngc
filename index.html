@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Niraj Global Corporation | Luxury Handcrafted Footwear</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-(function(){ emailjs.init("C4aYb6XawObk0rLTF"); })();
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+    (function() {
+        emailjs.init("C4aYb6XawObk0rLTF"); 
+    })();
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -16,38 +18,42 @@
 <style>
 :root{ --primary:#3e2723; --accent:#c6a75e; --bg:#f8f5f1; --white:#ffffff; }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{ font-family:'Poppins',sans-serif; background:var(--bg); color:#333;}
+body{ font-family:'Poppins',sans-serif; background:var(--bg); color:#333; scroll-behavior:smooth; }
 
-header{ background:#fff; padding:18px; text-align:center; font-weight:600; font-size:22px; color:var(--primary); position:sticky; top:0; z-index:1000; box-shadow:0 2px 20px rgba(0,0,0,0.05); }
+header{ background:rgba(255,255,255,0.9); padding:18px; text-align:center; font-weight:600; font-size:22px; color:var(--primary); position:sticky; top:0; z-index:1000; box-shadow:0 2px 20px rgba(0,0,0,0.05); }
 
 .hero{text-align:center; padding:50px 20px 30px;}
 .hero h1{font-family:'Playfair Display',serif; font-size:32px; color:var(--primary);}
 
-.products{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:30px; padding:20px; max-width:1200px; margin:0 auto; }
+.trust-section { max-width: 1000px; margin: 0 auto 30px; padding: 20px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+.trust-badge { background: var(--white); padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; min-width: 200px; border: 1px solid #eee; }
+.trust-badge i { color: var(--accent); font-size: 24px; margin-bottom: 10px; }
+.trust-badge h4 { color: var(--primary); font-size: 15px; margin-bottom: 5px;}
 
-.product-card{ background:var(--white); border-radius:18px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.08); transition:0.3s; }
+.products{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:30px; padding:20px; max-width: 1200px; margin: 0 auto; }
+.product-card{ background:var(--white); border-radius:18px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.08); transition:0.4s; display: flex; flex-direction: column; }
 .product-card:hover{transform:translateY(-6px);}
 
-.slider{position:relative; height:300px; overflow:hidden;}
+.slider{position:relative; overflow:hidden; height:300px;}
 .slider img{width:100%; height:100%; object-fit:cover; display:none;}
 .slider img.active{display:block;}
 .slider-buttons{ position:absolute; top:50%; width:100%; display:flex; justify-content:space-between; transform:translateY(-50%); }
-.slider-buttons button{ background:rgba(0,0,0,0.4); color:white; border:none; padding:8px 12px; cursor:pointer; border-radius:50%; }
+.slider-buttons button{ background:rgba(0,0,0,0.4); color:white; border:none; padding:8px 12px; cursor:pointer; border-radius: 50%; margin: 0 5px;}
 
-.product-info{padding:20px;}
-.price{color:var(--accent); font-weight:600; margin:10px 0;}
-.features{font-size:13px; list-style:none; margin-bottom:12px;}
-.features li::before {content:"• "; color:var(--accent);}
+.product-info{padding:20px; flex-grow: 1; display: flex; flex-direction: column;}
+.price{color:var(--accent); font-weight:600; margin:10px 0; font-size:18px;}
+.features{font-size:13px; margin-bottom:12px; list-style:none; flex-grow:1;}
+.features li::before {content: "• "; color: var(--accent);}
 
 .size-selector button{ padding:6px 12px; margin:5px 6px 5px 0; border-radius:20px; border:1px solid var(--primary); background:white; cursor:pointer; }
 .size-selector button.selected{background:var(--primary); color:white;}
 
-.btn-group {display:flex; gap:10px; margin-top:15px;}
-.add-cart,.buy-now{flex:1; padding:12px; border:none; border-radius:8px; color:white; cursor:pointer; font-weight:600;}
-.add-cart{background:#5d4037;}
-.buy-now{background:linear-gradient(45deg,var(--accent),#b5954a);}
+.btn-group {display: flex; gap: 10px; margin-top: 15px;}
+.add-cart, .buy-now { flex: 1; padding:12px; color:white; border:none; border-radius:8px; cursor:pointer; font-weight: 600; }
+.add-cart{background: #5d4037;}
+.buy-now {background: linear-gradient(45deg, var(--accent), #b5954a);}
 
-.cart-icon{ position:fixed; top:20px; right:20px; background:var(--primary); color:white; padding:14px; border-radius:50%; cursor:pointer; z-index:2000; }
+.cart-icon{ position:fixed; top:20px; right:20px; background:var(--primary); color:white; padding:14px; border-radius:50%; cursor:pointer; z-index:2000; box-shadow:0 5px 20px rgba(0,0,0,0.3);}
 .cart-count{position:absolute; top:-6px; right:-6px; background:red; padding:3px 6px; font-size:12px; border-radius:50%;}
 
 .cart-sidebar{ position:fixed; right:-100%; top:0; width:100%; max-width:420px; height:100%; background:white; transition:0.4s; padding:25px; overflow-y:auto; z-index:1500; box-shadow:-5px 0 40px rgba(0,0,0,0.3); }
@@ -56,10 +62,18 @@ header{ background:#fff; padding:18px; text-align:center; font-weight:600; font-
 .cart-item{border-bottom:1px solid #eee; margin-bottom:12px; padding-bottom:12px;}
 .remove-btn{background:red; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer;}
 
+#payment-box { text-align: center; background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--accent); }
+.qr-display { width: 180px; height: 180px; margin: 10px auto; display: block; border: 2px solid #eee; border-radius: 8px; }
+.rzp-btn { display: block; width: 100%; padding: 12px; background: #0073ec; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; margin-bottom: 10px; }
+
 .checkout-btn{ width:100%; padding:14px; background:var(--accent); border:none; color:white; border-radius:8px; cursor:pointer; font-weight:600; }
 
 footer{margin-top:40px; padding:40px 20px; text-align:center; background:#fff; border-top:1px solid #eee;}
-.whatsapp-float{ position:fixed; bottom:20px; right:20px; background:#25D366; color:white; padding:14px 18px; border-radius:50px; text-decoration:none; font-weight:600;}
+.social-links {margin: 20px 0; display: flex; justify-content: center; gap: 20px;}
+.social-links a {font-size: 24px; color: var(--primary); transition: 0.3s;}
+.social-links a:hover {color: var(--accent); transform: scale(1.2);}
+
+.whatsapp-float{ position:fixed; bottom:20px; right:20px; background:#25D366; color:white; padding:14px 18px; border-radius:50px; text-decoration:none; z-index: 1000; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.3);}
 </style>
 </head>
 
@@ -69,62 +83,124 @@ footer{margin-top:40px; padding:40px 20px; text-align:center; background:#fff; b
 
 <div class="hero">
 <h1>Luxury Handmade Rajasthani Jutti</h1>
+<p>Authentic Leather Craftsmanship from Nohar</p>
 </div>
 
-<div class="cart-icon" onclick="toggleCart()">🛒 <span class="cart-count" id="cartCount">0</span></div>
+<div class="trust-section">
+    <div class="trust-badge"><i class="fas fa-shield-alt"></i><h4>100% Authentic</h4><p>Pure Leather</p></div>
+    <div class="trust-badge"><i class="fas fa-lock"></i><h4>Secure Pay</h4><p>Razorpay & QR</p></div>
+    <div class="trust-badge"><i class="fas fa-truck"></i><h4>Fast Dispatch</h4><p>All India Delivery</p></div>
+</div>
+
+<div class="cart-icon" onclick="toggleCart()">
+🛒 <span class="cart-count" id="cartCount">0</span>
+</div>
 
 <div class="products"></div>
 
 <div class="cart-sidebar" id="cartSidebar">
 <h3>Your Cart & Checkout</h3>
 <div id="cartItems"></div>
-<div style="font-weight:600; margin:15px 0;">Total: ₹<span id="finalTotal">0</span></div>
+<div style="font-weight:600; margin:15px 0; font-size:18px;">Total: ₹<span id="finalTotal">0</span></div>
 
+<div class="checkout-form">
 <input type="text" id="custName" placeholder="Full Name" style="width:100%; padding:10px; margin-bottom:10px;">
 <input type="tel" id="custPhone" placeholder="Phone Number" style="width:100%; padding:10px; margin-bottom:10px;">
-<textarea id="custAddress" placeholder="Full Address with Pincode" style="width:100%; padding:10px; margin-bottom:10px;"></textarea>
-<input type="text" id="payId" placeholder="Enter Payment ID / UTR" style="width:100%; padding:10px; margin-bottom:10px;">
+<textarea id="custAddress" placeholder="Full Delivery Address with Pincode" style="width:100%; padding:10px; margin-bottom:10px;"></textarea>
+
+<div id="payment-box">
+    <p style="font-size:13px; font-weight:600;">Step 1: Pay via Link or QR</p>
+    <a href="#" target="_blank" class="rzp-btn" id="mainRzpLink">Pay via Razorpay</a>
+    <img src="" id="mainQrImg" class="qr-display" alt="Payment QR">
+    <p style="font-size:11px; color:#666;">Scan QR or click link to pay</p>
+    <hr style="margin:10px 0;">
+    <p style="font-size:13px; font-weight:600;">Step 2: Enter Payment ID</p>
+    <input type="text" id="payId" placeholder="Enter Razorpay Payment ID / UTR" style="width:100%; padding:8px; border:1px solid #ccc;">
+</div>
 
 <button class="checkout-btn" onclick="checkout()" id="confirmBtn">Confirm Order</button>
+</div>
 </div>
 
 <a class="whatsapp-float" href="https://wa.me/918302927385" target="_blank">Chat on WhatsApp</a>
 
 <footer>
-<strong>Niraj Global Corporation</strong><br>
-Nohar, Rajasthan<br>
-📞 +91 8302927385
+<strong>Niraj Global Corporation</strong><br>Nohar, Rajasthan.<br>
+<div class="social-links">
+    <a href="https://www.instagram.com/nirajglobalcorporation?igsh=czk3enNkaHRvem5i" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.facebook.com/share/1FCCB7Twdk/" target="_blank"><i class="fab fa-facebook"></i></a>
+    <a href="https://x.com/nirajglobalcorp" target="_blank"><i class="fab fa-twitter"></i></a>
+</div>
+<div style="font-size: 13px; color: #666; margin-top: 10px;">
+    <p>📞 +91 8302927385 | ✉️ nirajglobalcorporation@gmail.com</p>
+</div>
 </footer>
 
 <script>
-const products=[
-{title:"Brown Men's Jutti",price:1499,rzp:"https://rzp.io/rzp/soDdTOiB",sizes:[6,7,8,9,10],images:["https://i.ibb.co/N1kG9xT/1.jpg","https://i.ibb.co/1fW5g0t/2.jpg","https://i.ibb.co/pLgLd4Z/3.jpg"]},
-{title:"Black Men's Jutti",price:1499,rzp:"https://rzp.io/rzp/soDdTOiB",sizes:[6,7,8,9,10],images:["https://i.ibb.co/v6n9dKj/1.jpg","https://i.ibb.co/g4bK7X6/2.jpg","https://i.ibb.co/Hq2W9z9/3.jpg"]}
+const products = [
+{
+    title: "Lakhadti Men’s Handmade Leather Jutti",
+    variant: "Brown Variant Men's",
+    price: 1499,
+    rzp: "https://rzp.io/rzp/soDdTOiB",
+    qr: "https://i.ibb.co/m5pK0z0B/Fix-1499.jpg",
+    sizes: [6, 7, 8, 9, 10],
+    features: ["Premium Synthetic Leather Upper","Traditional Handmade Design","Soft Cushioned Insole"],
+    images: ["https://i.ibb.co/N1kG9xT/1.jpg","https://i.ibb.co/1fW5g0t/2.jpg","https://i.ibb.co/pLgLd4Z/3.jpg"]
+},
+{
+    title: "Lakhadti Men’s Handmade Leather Jutti",
+    variant: "Black Variant Men's",
+    price: 1499,
+    rzp: "https://rzp.io/rzp/soDdTOiB",
+    qr: "https://i.ibb.co/m5pK0z0B/Fix-1499.jpg",
+    sizes: [6, 7, 8, 9, 10],
+    features: ["Premium Synthetic Leather Upper","Traditional Handmade Design","Soft Cushioned Insole"],
+    images: ["https://i.ibb.co/v6n9dKj/1.jpg","https://i.ibb.co/g4bK7X6/2.jpg","https://i.ibb.co/Hq2W9z9/3.jpg"]
+},
+{
+    title: "Lakhadti Men’s Handmade Leather Jutti",
+    variant: "Maroon Variant Men's",
+    price: 1499,
+    rzp: "https://rzp.io/rzp/soDdTOiB",
+    qr: "https://i.ibb.co/m5pK0z0B/Fix-1499.jpg",
+    sizes: [6, 7, 8, 9, 10],
+    features: ["Premium Synthetic Leather Upper","Traditional Handmade Design","Soft Cushioned Insole"],
+    images: ["https://i.ibb.co/QfY9pPq/1.jpg","https://i.ibb.co/r7C8h0x/2.jpg","https://i.ibb.co/4K3589B/3.jpg"]
+},
+{
+    title: "Handcrafted Pure Leather Brown Punjabi Jutti for Women",
+    variant: "Brown Variant Women's",
+    price: 999,
+    rzp: "https://rzp.io/rzp/07euhe7",
+    qr: "https://i.ibb.co/wh1YbB58/Fix-999.jpg",
+    sizes: [4, 5, 6, 7],
+    features: ["Authentic Punjabi Style","Premium leather Material","Intricate Cutwork Design"],
+    images: ["https://i.ibb.co/KcqCLp29/1772102158894.png","https://i.ibb.co/FLWcSjvv/1772102158882.png","https://i.ibb.co/yFxVTS20/1772102158865.png"]
+}
 ];
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+const OPEN_RZP = "https://razorpay.me/@nirajglobalcorporation";
+const OPEN_QR = "https://i.ibb.co/1GCqsHYW/1772636203741.jpg";
 
-function saveCart(){localStorage.setItem("cart",JSON.stringify(cart));}
+let cart=[];
 
 function renderProducts(){
 document.querySelector(".products").innerHTML=products.map((p,i)=>`
 <div class="product-card">
 <div class="slider" id="slider${i}">
 ${p.images.map((img,idx)=>`<img src="${img}" class="${idx===0?'active':''}">`).join("")}
-<div class="slider-buttons">
-<button onclick="prevSlide(${i})">‹</button>
-<button onclick="nextSlide(${i})">›</button>
-</div>
+<div class="slider-buttons"><button onclick="prevSlide(${i})">‹</button><button onclick="nextSlide(${i})">›</button></div>
 </div>
 <div class="product-info">
 <h3>${p.title}</h3>
+<div style="font-size:14px; color:#666;">${p.variant}</div>
 <div class="price">₹${p.price}</div>
-<div class="size-selector" id="size${i}">
-${p.sizes.map(s=>`<button onclick="selectSize(${i},this)">${s}</button>`).join("")}
-</div>
+<ul class="features">${p.features.map(f => `<li>${f}</li>`).join("")}</ul>
+<div class="size-selector" id="size${i}">${p.sizes.map(s=>`<button onclick="selectSize(${i},this)">${s}</button>`).join("")}</div>
 <div class="btn-group">
-<button class="add-cart" onclick="addToCart(${i})">Add to Cart</button>
-<button class="buy-now" onclick="buyNow(${i})">Buy Now</button>
+    <button class="add-cart" onclick="addToCart(${i})">Add to Cart</button>
+    <button class="buy-now" onclick="buyNow(${i})">Buy Now</button>
 </div>
 </div>
 </div>`).join("");
@@ -137,31 +213,39 @@ btn.classList.add("selected");
 
 function addToCart(i){
 let size=document.querySelector(`#size${i} .selected`);
-if(!size){alert("Select size"); return false;}
-cart.push({...products[i],selectedSize:size.innerText});
-saveCart();
+if(!size){alert("Please select size"); return false;}
+cart.push({...products[i], selectedSize: size.innerText});
 updateCart();
 return true;
 }
 
-function buyNow(i){if(addToCart(i))toggleCart();}
+function buyNow(i){ if(addToCart(i)) toggleCart(); }
 
 function updateCart(){
-let total=0,html="";
-cart.forEach((item,index)=>{
-total+=item.price;
-html+=`<div class="cart-item"><b>${item.title}</b> (Size ${item.selectedSize}) - ₹${item.price}
-<button class="remove-btn" onclick="removeItem(${index})">×</button></div>`;
+let total = 0;
+let html = "";
+cart.forEach((item, index) => {
+    total += item.price;
+    html += `<div class="cart-item"><b>${item.variant}</b> (${item.selectedSize}) - ₹${item.price} <button class="remove-btn" onclick="removeItem(${index})">×</button></div>`;
 });
-document.getElementById("cartItems").innerHTML=html;
-document.getElementById("finalTotal").innerText=total;
-document.getElementById("cartCount").innerText=cart.length;
-saveCart();
+document.getElementById("cartItems").innerHTML = html;
+document.getElementById("finalTotal").innerText = total;
+document.getElementById("cartCount").innerText = cart.length;
+
+let rzpBtn = document.getElementById("mainRzpLink");
+let qrImg = document.getElementById("mainQrImg");
+
+if(cart.length === 1){
+    rzpBtn.href = cart[0].rzp;
+    qrImg.src = cart[0].qr;
+} else if(cart.length > 1){
+    rzpBtn.href = OPEN_RZP;
+    qrImg.src = OPEN_QR;
+}
 }
 
-function removeItem(i){cart.splice(i,1);updateCart();}
-
-function toggleCart(){document.getElementById("cartSidebar").classList.toggle("active");}
+function removeItem(i){ cart.splice(i,1); updateCart(); }
+function toggleCart(){ document.getElementById("cartSidebar").classList.toggle("active"); }
 
 function prevSlide(i){
 let slides=document.querySelectorAll(`#slider${i} img`);
@@ -177,35 +261,28 @@ slides[(active+1)%slides.length].classList.add("active");
 }
 
 function checkout(){
-let name=custName.value.trim();
-let phone=custPhone.value.trim();
-let addr=custAddress.value.trim();
-let payId=payIdInput.value.trim();
+let name=document.getElementById("custName").value;
+let phone=document.getElementById("custPhone").value;
+let addr=document.getElementById("custAddress").value;
+let payId=document.getElementById("payId").value;
 
-if(!name||!phone||!addr||!payId){alert("Fill all details");return;}
-if(phone.length<10){alert("Enter valid phone");return;}
+if(!name||!phone||!addr||!payId){alert("Please fill all details and Payment ID"); return;}
 
-let total=document.getElementById("finalTotal").innerText;
+let btn = document.getElementById("confirmBtn");
+btn.innerText = "Processing Order..."; btn.disabled = true;
 
-let message=`🛍️ NEW ORDER\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${addr}\nItems:\n`;
-cart.forEach(item=>message+=`- ${item.title} (Size ${item.selectedSize})\n`);
-message+=`Total: ₹${total}\nPayment ID: ${payId}`;
+let message = `🛍️ NEW ORDER\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${addr}\nItems:\n`;
+cart.forEach(item => message += `- ${item.variant} (Size ${item.selectedSize})\n`);
+message += `Total: Rs ${document.getElementById("finalTotal").innerText}\nPayment ID: ${payId}`;
 
-cart=[];
-saveCart();
-updateCart();
-
-window.location.href=`https://wa.me/918302927385?text=${encodeURIComponent(message)}`;
+emailjs.send('service_f3z90n3', 'template_aay5xts', {message: message})
+.then(() => {
+    window.location.href=`https://wa.me/918302927385?text=${encodeURIComponent(message)}`;
+    cart=[]; updateCart();
+});
 }
 
-const custName=document.getElementById("custName");
-const custPhone=document.getElementById("custPhone");
-const custAddress=document.getElementById("custAddress");
-const payIdInput=document.getElementById("payId");
-
 renderProducts();
-updateCart();
 </script>
-
 </body>
 </html>
