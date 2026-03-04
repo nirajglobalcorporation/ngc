@@ -59,8 +59,11 @@ color:#555;
 /* Grid */
 .products{
 display:grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 gap:30px;
 padding:20px;
+max-width: 1200px;
+margin: 0 auto;
 }
 
 /* Premium Card */
@@ -72,6 +75,8 @@ box-shadow:0 20px 40px rgba(0,0,0,0.08);
 transition:0.4s;
 animation:fadeUp 0.8s ease forwards;
 opacity:0;
+display: flex;
+flex-direction: column;
 }
 .product-card:hover{
 transform:translateY(-6px);
@@ -86,6 +91,8 @@ from{opacity:0;transform:translateY(40px);}
 .slider{position:relative;overflow:hidden;}
 .slider img{
 width:100%;
+height:300px;
+object-fit:cover;
 display:none;
 cursor:pointer;
 transition:0.4s;
@@ -107,10 +114,17 @@ cursor:pointer;
 }
 
 /* Product Info */
-.product-info{padding:20px;}
+.product-info{padding:20px; flex-grow: 1; display: flex; flex-direction: column;}
 .product-info h3{
-font-size:18px;
+font-size:16px;
 color:var(--primary);
+line-height: 1.4;
+margin-bottom: 5px;
+}
+.variant-name {
+font-size: 14px;
+color: #777;
+font-weight: 500;
 }
 .price{
 color:var(--accent);
@@ -121,6 +135,8 @@ font-size:18px;
 .features{
 font-size:13px;
 margin-bottom:12px;
+flex-grow: 1;
+padding-left: 15px;
 }
 .features li{margin-bottom:4px;}
 
@@ -143,6 +159,7 @@ width:70px;
 padding:6px;
 border-radius:6px;
 border:1px solid #ccc;
+margin-top: 10px;
 }
 
 .add-cart{
@@ -152,9 +169,10 @@ background:linear-gradient(45deg,var(--primary),#5d4037);
 color:white;
 border:none;
 border-radius:8px;
-margin-top:12px;
+margin-top:15px;
 cursor:pointer;
 transition:0.3s;
+font-weight: 600;
 }
 .add-cart:hover{
 background:linear-gradient(45deg,#5d4037,var(--primary));
@@ -317,7 +335,7 @@ box-shadow:0 4px 15px rgba(0,0,0,0.3);
 <div class="products"></div>
 
 <div class="cart-sidebar" id="cartSidebar">
-<h3>Your Cart</h3>
+<h3 style="margin-bottom: 15px;">Your Cart</h3>
 <div id="cartItems"></div>
 <div class="total">Total: ₹<span id="cartTotal">0</span></div>
 
@@ -350,10 +368,73 @@ Nohar, Hanumangarh, Rajasthan.
 </footer>
 
 <script>
-const products=[
-{color:"Brown",images:["https://i.ibb.co/CKwhpW1n/1.jpg","https://i.ibb.co/chBSZ3Hq/2.jpg","https://i.ibb.co/tpK7HYHv/3.jpg"]},
-{color:"Black",images:["https://i.ibb.co/GvM2GdXz/1.jpg","https://i.ibb.co/5hvvwR1g/2.jpg","https://i.ibb.co/CKk63pR2/3.jpg"]},
-{color:"Maroon",images:["https://i.ibb.co/y2fp60b/1.jpg","https://i.ibb.co/0pZMyFYt/2.jpg","https://i.ibb.co/KpF0nKxH/3.jpg"]}
+// SMART DATA STRUCTURE
+const products = [
+{
+    title: "Lakhadti Men’s Handmade Pure Leather Rajasthani Jutti",
+    variant: "Brown Variant Men's",
+    price: 1499,
+    sizes: [6, 7, 8, 9, 10],
+    features: [
+        "Premium Synthetic Leather Upper",
+        "Traditional Handmade Design",
+        "Soft Cushioned Insole",
+        "Lightweight & Durable Sole",
+        "Perfect Fit for Indian Feet",
+        "Easy Slip-On Style"
+    ],
+    images: ["https://i.ibb.co/Y4x3P12J/Gemini-Generated-Image-dovijgdovijgdovi.png","https://i.ibb.co/7tywXss5/Gemini-Generated-Image-9mubo39mubo39mub.png","https://i.ibb.co/qYJXf40v/Gemini-Generated-Image-36vekz36vekz36ve.png"]
+},
+{
+    title: "Lakhadti Men’s Handmade Pure Leather Rajasthani Jutti",
+    variant: "Black Variant Men's",
+    price: 1499,
+    sizes: [6, 7, 8, 9, 10],
+    features: [
+        "Premium Synthetic Leather Upper",
+        "Traditional Handmade Design",
+        "Soft Cushioned Insole",
+        "Lightweight & Durable Sole",
+        "Perfect Fit for Indian Feet",
+        "Easy Slip-On Style"
+    ],
+    images: ["https://i.ibb.co/7tyLMxXh/black-jutti.png","https://i.ibb.co/7xQhK24n/black-jutti-1.png","https://i.ibb.co/ZzJ2VK8f/black-jutti-2.png"]
+},
+{
+    title: "Lakhadti Men’s Handmade Pure Leather Rajasthani Jutti",
+    variant: "Maroon Variant Men's",
+    price: 1499,
+    sizes: [6, 7, 8, 9, 10],
+    features: [
+        "Premium Synthetic Leather Upper",
+        "Traditional Handmade Design",
+        "Soft Cushioned Insole",
+        "Lightweight & Durable Sole",
+        "Perfect Fit for Indian Feet",
+        "Easy Slip-On Style"
+    ],
+    images: ["https://i.ibb.co/DHKNyGVN/Chat-GPT-Image-Jan-5-2026-10-38-34-PM.png","https://i.ibb.co/DgTknYjW/red-jutti-1.png","https://i.ibb.co/5gRs9mQc/red-jutti-3.png"]
+},
+{
+    title: "Handcrafted Pure Leather Brown Punjabi Jutti for Women",
+    variant: "Brown Variant Women's",
+    price: 999,
+    sizes: [4, 5, 6, 7],
+    features: [
+        "Authentic Punjabi Style",
+        "Premium Material: High-quality leather",
+        "Intricate Cutwork Design",
+        "All-Day Comfort: Flat sole",
+        "Versatile Fashion: Pairs with suits and jeans"
+    ],
+    images: [
+        "https://i.ibb.co/KcqCLp29/1772102158894.png",
+        "https://i.ibb.co/FLWcSjvv/1772102158882.png",
+        "https://i.ibb.co/yFxVTS20/1772102158865.png",
+        "https://i.ibb.co/9HP2LDkx/1772102158846.png",
+        "https://i.ibb.co/GfhtS6kK/1772271615006.jpg"
+    ]
+}
 ];
 
 let cart=JSON.parse(localStorage.getItem("cart"))||[];
@@ -371,23 +452,19 @@ ${p.images.map((img,index)=>`<img src="${img}" class="${index===0?'active':''}" 
 </div>
 </div>
 <div class="product-info">
-<h3>${p.color} Variant</h3>
-<div class="price">₹1499</div>
+<h3>${p.title}</h3>
+<div class="variant-name">${p.variant}</div>
+<div class="price">₹${p.price}</div>
 <ul class="features">
-<li>Premium Synthetic Leather Upper</li>
-<li>Traditional Handmade Design</li>
-<li>Soft Cushioned Insole</li>
-<li>Lightweight & Durable Sole</li>
-<li>Perfect Fit for Indian Feet</li>
-<li>Easy Slip-On Style</li>
+${p.features.map(f => `<li>${f}</li>`).join("")}
 </ul>
 <div class="size-selector" id="size${i}">
-${[7,8,9,10].map(s=>`<button onclick="selectSize(${i},this)">${s}</button>`).join("")}
+${p.sizes.map(s=>`<button onclick="selectSize(${i},this)">${s}</button>`).join("")}
 </div>
 <div class="quantity">Qty:
 <input type="number" id="qty${i}" min="1" value="1">
 </div>
-<button class="add-cart" onclick="addToCart('${p.color}',${i})">Add to Cart</button>
+<button class="add-cart" onclick="addToCart(${i})">Add to Cart</button>
 </div>
 </div>
 `).join("");
@@ -398,11 +475,18 @@ document.querySelectorAll(`#size${i} button`).forEach(b=>b.classList.remove("sel
 btn.classList.add("selected");
 }
 
-function addToCart(color,i){
+function addToCart(i){
+let product = products[i];
 let size=document.querySelector(`#size${i} .selected`);
-if(!size){alert("Select size");return;}
+if(!size){alert("Please select a size first");return;}
 let qty=parseInt(document.getElementById(`qty${i}`).value);
-cart.push({color,size:size.innerText,qty,price:1499});
+cart.push({
+    title: product.title,
+    variant: product.variant,
+    size: size.innerText,
+    qty: qty,
+    price: product.price
+});
 saveCart();
 updateCart();
 }
@@ -416,7 +500,8 @@ let itemTotal=item.qty*item.price;
 total+=itemTotal;
 html+=`
 <div class="cart-item">
-<b>${item.color}</b> | Size ${item.size}<br>
+<b>${item.variant}</b> | Size ${item.size}<br>
+<span style="font-size:12px; color:#555;">${item.title}</span><br>
 Qty: ${item.qty} × ₹${item.price} = ₹${itemTotal}<br>
 <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
 </div>`;
@@ -457,24 +542,25 @@ document.getElementById("zoomModal").style.display="none";
 }
 
 function checkout(){
-if(cart.length===0){alert("Cart empty");return;}
+if(cart.length===0){alert("Cart is empty");return;}
 let name=document.getElementById("custName").value;
 let phone=document.getElementById("custPhone").value;
 let address=document.getElementById("custAddress").value;
-if(!name||!phone||!address){alert("Fill all details");return;}
+if(!name||!phone||!address){alert("Please fill all contact details");return;}
 
 let total=0;
 let message="🛍️ *NEW ORDER - Niraj Global Corporation*%0A%0A";
 cart.forEach((item,i)=>{
 let itemTotal=item.qty*item.price;
 total+=itemTotal;
-message+=`Item ${i+1}: ${item.color}%0A`;
-message+=`Size: ${item.size}%0A`;
-message+=`Qty: ${item.qty}%0A`;
-message+=`Total: ₹${itemTotal}%0A%0A`;
+message+=`*Item ${i+1}:* ${item.title}%0A`;
+message+=`*Variant:* ${item.variant}%0A`;
+message+=`*Size:* ${item.size}%0A`;
+message+=`*Qty:* ${item.qty} x ₹${item.price}%0A`;
+message+=`*Subtotal:* ₹${itemTotal}%0A%0A`;
 });
-message+=`TOTAL: ₹${total}%0A%0A`;
-message+=`Name: ${name}%0APhone: ${phone}%0AAddress: ${address}`;
+message+=`*GRAND TOTAL: ₹${total}*%0A%0A`;
+message+=`*Customer Details:*%0AName: ${name}%0APhone: ${phone}%0AAddress: ${address}`;
 
 document.getElementById("successPopup").style.display="block";
 setTimeout(()=>{document.getElementById("successPopup").style.display="none";},3000);
