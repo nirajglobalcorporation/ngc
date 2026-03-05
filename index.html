@@ -89,6 +89,17 @@ footer{margin-top:40px; padding:40px 20px; text-align:center; background:#fff; b
 </head>
 
 <body>
+<button id="loginBtn" onclick="loginWithGoogle()" style="background: #d32f2f; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; display: block; margin: 10px auto;">
+    Login with Google
+</button>
+
+<div id="trackingBox" style="display: none; border: 1px solid #ccc; padding: 15px; margin: 20px auto; max-width: 600px; background: white; border-radius: 8px;">
+    <h3>📦 My Orders & Tracking</h3>
+    <p id="userEmailDisplay" style="color: #666; font-size: 14px; margin-bottom: 10px;"></p>
+    <ul id="orderStatusList" style="list-style-type: none; padding: 0;">
+        </ul>
+    <button onclick="logout()" style="margin-top: 10px; background: #333; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Logout</button>
+</div>
 
 <header>Niraj Global Corporation</header>
 
@@ -295,29 +306,157 @@ slides[active].classList.remove("active");
 slides[(active+1)%slides.length].classList.add("active");
 }
 
-function checkout(){
-let name=document.getElementById("custName").value;
-let phone=document.getElementById("custPhone").value;
-let addr=document.getElementById("custAddress").value;
-let payId=document.getElementById("payId").value;
-
-if(!name||!phone||!addr||!payId){alert("Please fill all details and Payment ID"); return;}
-
-let btn = document.getElementById("confirmBtn");
-btn.innerText = "Processing Order..."; btn.disabled = true;
-
-let message = `🛍️ NEW ORDER\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${addr}\nItems:\n`;
-cart.forEach(item => message += `- ${item.variant} (Size ${item.selectedSize})\n`);
-message += `Total: Rs ${document.getElementById("finalTotal").innerText}\nPayment ID: ${payId}`;
-
-emailjs.send('service_f3z90n3', 'template_aay5xts', {message: message})
-.then(() => {
-    window.location.href=`https://wa.me/918302927385?text=${encodeURIComponent(message)}`;
-    cart=[]; updateCart();
+// BAHAR CLICK KARNE PAR CART BAND HONE KA CODE
+document.addEventListener('click', function(event) {
+    let sidebar = document.getElementById("cartSidebar");
+    let cartIcon = document.querySelector(".cart-icon");
+    // Check karein ki click cart ke bahar aur cart button ke bahar hua hai
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !cartIcon.contains(event.target)) {
+        sidebar.classList.remove('active');
+    }
 });
-}
 
 renderProducts();
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+// 1. Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyD7AQjeTxInimDxzcWBJkBOm3G6u5y9LC8",
+  authDomain: "niraj-global-corporation.firebaseapp.com",
+  projectId: "niraj-global-corporation",
+  storageBucket: "niraj-global-corporation.firebasestorage.app",
+  messagingSenderId: "1030660370877",
+  appId: "1:1030660370877:web:f384ad0ad93cd8faede2d4",
+  measurementId: "G-VS3CT6J5QB"
+};
+
+// Firebase Start karna
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// 2. Google Login Function
+function loginWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).then((result) => {
+        alert("Welcome to Niraj Global Corporation, " + result.user.displayName + "!");
+    }).catch((error) => {
+        console.error("Login Error:", error);
+    });
+}
+
+// 3. User Login Check & Order Tracking Dikhana
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("trackingBox").style.display = "block";
+        document.getElementById("userEmailDisplay").innerText = "Account: " + user.email;
+        loadUserOrders(user.uid);
+    } else {
+        document.getElementById("loginBtn").style.display = "block";
+        document.getElementById("trackingBox").style.display = "none";
+    }
+});
+
+function logout() {
+    auth.signOut();
+}
+
+// 4. Order Status Load Karna
+function loadUserOrders(uid) {
+    db.collection("users").doc(uid).collection("orders").onSnapshot((querySnapshot) => {
+        let statusHtml = "";
+        querySnapshot.forEach((doc) => {
+            let order = doc.data();
+            let allStatuses = ["Order Placed", "Accepted", "Paid", "Dispatched", "On the way", "Delivered"];
+            let currentStatusIndex = allStatuses.indexOf(order.status);
+            
+            statusHtml += `<li><b>Order ID: ${doc.id}</b><br>`;
+            allStatuses.forEach((step, index) => {
+                if (index <= currentStatusIndex) {
+                    statusHtml += `✅ ${step} -> `;
+                } else {
+                    statusHtml += `⏳ ${step} -> `;
+                }
+            });
+            statusHtml += `</li><hr>`;
+        });
+        
+        if(statusHtml === "") {
+            statusHtml = "Abhi tak koi order nahi kiya hai.";
+        }
+        document.getElementById("orderStatusList").innerHTML = statusHtml;
+    });
+}
+
+// 5. NAYA ALL-IN-ONE CHECKOUT FUNCTION
+function checkout() {
+    let name = document.getElementById("custName").value;
+    let phone = document.getElementById("custPhone").value;
+    let addr = document.getElementById("custAddress").value;
+    let payId = document.getElementById("payId").value;
+
+    if(!name || !phone || !addr || !payId){
+        alert("Please fill all details and Payment ID"); 
+        return;
+    }
+
+    var user = firebase.auth().currentUser;
+    if (!user) {
+        alert("Pehle kripya 'Login with Google' par click karein taaki hum aapka order track kar sakein!");
+        return;
+    }
+
+    let btn = document.getElementById("confirmBtn");
+    btn.innerText = "Processing Order..."; 
+    btn.disabled = true;
+
+    let message = `🛍️ NEW ORDER\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${addr}\nItems:\n`;
+    cart.forEach(item => message += `- ${item.variant} (Size ${item.selectedSize})\n`);
+    message += `Total: Rs ${document.getElementById("finalTotal").innerText}\nPayment ID: ${payId}`;
+
+    var newOrderId = "NGC-" + Math.floor(100000 + Math.random() * 900000);
+
+    // Pehle Firebase me order save karna
+    db.collection("users").doc(user.uid).collection("orders").doc(newOrderId).set({
+        orderId: newOrderId,
+        name: name,
+        phone: phone,
+        address: addr,
+        paymentId: payId,
+        status: "Order Placed", 
+        date: new Date().toLocaleString()
+    })
+    .then(() => {
+        // Firebase me save hone ke baad Email/WhatsApp bhejna
+        emailjs.send('service_f3z90n3', 'template_aay5xts', {message: message})
+        .then(() => {
+            alert("Badhai ho! Aapka order safaltapurvak save ho gaya hai. Order ID: " + newOrderId);
+            window.location.href = `https://wa.me/918302927385?text=${encodeURIComponent(message)}`;
+            cart = []; 
+            updateCart();
+            document.getElementById("cartSidebar").classList.remove("active"); // Cart band karega
+            btn.innerText = "Confirm Order"; 
+            btn.disabled = false;
+        }).catch((err) => {
+            console.error("Email Error:", err);
+            alert("Order save ho gaya hai, par Email bhejne me dikkat aayi.");
+            btn.innerText = "Confirm Order"; 
+            btn.disabled = false;
+        });
+    })
+    .catch((error) => {
+        console.error("Order save error: ", error);
+        alert("Kuch technical dikkat aayi. Kripya dobara koshish karein.");
+        btn.innerText = "Confirm Order"; 
+        btn.disabled = false;
+    });
+}
 </script>
 </body>
 </html>
