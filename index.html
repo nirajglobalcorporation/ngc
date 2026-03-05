@@ -89,9 +89,26 @@ footer{margin-top:40px; padding:40px 20px; text-align:center; background:#fff; b
 </head>
 
 <body>
-<button id="loginBtn" onclick="loginWithGoogle()" style="background: #d32f2f; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; display: block; margin: 10px auto;">
-    Login with Google
-</button>
+<div id="loginSection" style="max-width: 400px; margin: 20px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); text-align: center; border: 1px solid #eee;">
+    <h3 style="margin-bottom: 20px; color: #3e2723;">Login to Track Orders</h3>
+    
+    <div id="phoneLoginForm">
+        <input type="tel" id="phoneNumber" placeholder="Phone Number (+91...)" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <div id="recaptcha-container" style="margin-bottom: 10px;"></div>
+        <button onclick="sendOTP()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 10px; background: #c6a75e; color: white;">Send OTP</button>
+    </div>
+
+    <div id="otpVerificationForm" style="display: none;">
+        <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <button onclick="verifyOTP()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 10px; background: #28a745; color: white;">Verify OTP</button>
+    </div>
+
+    <div style="margin: 15px 0; color: #999; font-size: 14px;">--- OR ---</div>
+    
+    <button onclick="loginWithGoogle()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 10px; background: #db4437; color: white;">
+        Login with Google
+    </button>
+</div>
 
 <div id="trackingBox" style="display: none; border: 1px solid #ccc; padding: 15px; margin: 20px auto; max-width: 600px; background: white; border-radius: 8px;">
     <h3>📦 My Orders & Tracking</h3>
@@ -349,17 +366,59 @@ function loginWithGoogle() {
         console.error("Login Error:", error);
     });
 }
+// 3. Phone Number Login Functions
+window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    'size': 'invisible',
+    'callback': (response) => { sendOTP(); }
+});
 
-// 3. User Login Check & Order Tracking Dikhana
+let confirmationResultData;
+
+function sendOTP() {
+    let phoneNumber = document.getElementById("phoneNumber").value;
+    if (!phoneNumber.startsWith("+91")) phoneNumber = "+91" + phoneNumber;
+    if (phoneNumber.length < 13) { alert("Please enter a valid 10-digit phone number."); return; }
+
+    const appVerifier = window.recaptchaVerifier;
+    firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+            window.confirmationResultData = confirmationResult;
+            alert("OTP has been sent to your phone!");
+            document.getElementById("phoneLoginForm").style.display = "none";
+            document.getElementById("otpVerificationForm").style.display = "block";
+        }).catch((error) => {
+            console.error("Error SMS not sent", error);
+            alert("Error sending OTP. Please check the number or try again.");
+            window.recaptchaVerifier.render().then(function(widgetId) { grecaptcha.reset(widgetId); });
+        });
+}
+
+function verifyOTP() {
+    let code = document.getElementById("otpCode").value;
+    if (code.length !== 6) { alert("Please enter the 6-digit OTP."); return; }
+
+    window.confirmationResultData.confirm(code).then((result) => {
+        alert("Phone Login Successful!");
+    }).catch((error) => {
+        console.error("Error OTP verification", error);
+        alert("Invalid OTP. Please try again.");
+    });
+}
+// 4. User Login Check & Status Update
 auth.onAuthStateChanged((user) => {
     if (user) {
-        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("loginSection").style.display = "none";
         document.getElementById("trackingBox").style.display = "block";
-        document.getElementById("userEmailDisplay").innerText = "Account: " + user.email;
+        let identifier = user.email ? user.email : user.phoneNumber;
+        document.getElementById("userEmailDisplay").innerText = "Account: " + identifier;
         loadUserOrders(user.uid);
     } else {
-        document.getElementById("loginBtn").style.display = "block";
+        document.getElementById("loginSection").style.display = "block";
         document.getElementById("trackingBox").style.display = "none";
+        document.getElementById("phoneLoginForm").style.display = "block";
+        document.getElementById("otpVerificationForm").style.display = "none";
+        document.getElementById("phoneNumber").value = "";
+        document.getElementById("otpCode").value = "";
     }
 });
 
