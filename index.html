@@ -368,7 +368,7 @@ function loginWithGoogle() {
 }
 // 3. Phone Number Login Functions
 window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-    'size': 'invisible',
+    'size': 'normal',
     'callback': (response) => { sendOTP(); }
 });
 
